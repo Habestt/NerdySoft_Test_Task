@@ -90,24 +90,18 @@ namespace NerdySoft_Test_Task.Controllers
         [HttpGet("api/GetTop3")]
         public IActionResult GetTopSimilarAnnouncements()
         {
-            IEnumerable<Announcement> announcements;
-            //IEnumerable<Announcement> result;
+            IEnumerable<Announcement> announcements;            
             try
-            {
+            {                
                 announcements = _context.Announcements.ToList();
 
-                //result = announcements.Where(x => x.Title.Union(x.Description));
-
-
-                //IEnumerable<string> differenceQuery = announcements.Any(y => y.Description.Equals(y.Title))
-
+                return Ok(announcements.Select(x => announcements.Where(y => y.Description.ToLower().Split(" ").Any(z => x.Title.ToLower().Split(" ").Any(o => o == z))).Take(1).Take(3)));                                
 
             }
             catch (Exception)
             {
                 return StatusCode(500);
-            }
-            return Ok(announcements);
+            }            
         }
     } 
 }
